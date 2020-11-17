@@ -20,7 +20,6 @@ class SettingsActivity : AppCompatActivity() {
 
     private lateinit var settingsViewModel : SettingsActivityViewModel
 
-    private var askForPermission = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -44,6 +43,7 @@ class SettingsActivity : AppCompatActivity() {
 
         recyclerView.adapter = adapter
 
+        //filling the Text fields of the app
         settingsViewModel.currentID.observe(this, Observer {
             if(it == Long.MIN_VALUE){
                 primaryEditText.setText("")
@@ -53,6 +53,7 @@ class SettingsActivity : AppCompatActivity() {
                 settingsViewModel.getCurrentFill()
             }
         })
+
 
         settingsViewModel.toSend.observe(this, Observer {
             primaryEditText.setText(it.username)
@@ -66,17 +67,6 @@ class SettingsActivity : AppCompatActivity() {
             adapter.submitList(it)
         })
 
-//        val sharedPreferences =
-//            getSharedPreferences("EMAIL_STORAGE", Context.MODE_PRIVATE)
-//        val primaryEmail = sharedPreferences.getString("PRIMARY_EMAIL", "")
-//        primaryEditText.setText(primaryEmail)
-//
-//        if(primaryEmail == ""){
-//            askForPermission = true
-//            tempText.visibility = View.VISIBLE
-//            tempButton.visibility = View.VISIBLE
-//        }
-
     }
 
     fun saveEmailAddresses(view: View) {
@@ -85,8 +75,6 @@ class SettingsActivity : AppCompatActivity() {
             Toast.makeText(this, "Fill all the values", Toast.LENGTH_SHORT).show()
             return
         }
-        //getting previous values saved for email
-//        val editor = getSharedPreferences("EMAIL_STORAGE", Context.MODE_PRIVATE).edit()
 
         val primaryEmail = primaryEditText.text.toString()
         val primaryPassword = passwordEditText.text.toString()
@@ -103,17 +91,6 @@ class SettingsActivity : AppCompatActivity() {
         }else{
             Toast.makeText(this, "Fill all the details", Toast.LENGTH_SHORT).show()
         }
-
-        //saving password and email for when user re-opens the app
-//        editor.putString("PRIMARY_EMAIL", primaryEmail)
-//        editor.putString("PRIMARY_PASSWORD", primaryPassword)
-//        editor.commit()
-
-//        if(getSharedPreferences("EMAIL_STORAGE", Context.MODE_PRIVATE).getString("PRIMARY_EMAIL", "")
-//        != ""){
-//            Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show()
-//        }
-
     }
 
 
@@ -134,6 +111,7 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
+    //Add new fill data
         fun addNewFill(view: View) {
             settingsViewModel.changeCurrentID(Long.MIN_VALUE)
             if (save_button.visibility != View.VISIBLE)
